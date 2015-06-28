@@ -36,33 +36,40 @@ namespace WordChemHelp
 
         private void button1_Click(object sender, RibbonControlEventArgs e)
         {
-            var currRange = Globals.ThisAddIn.Application.Selection.Range;
-            int rStart = currRange.Start;
-
-            string text = currRange.Text.Trim();
-            FormatString fstring = helper.FormatInput(text);
-
-            for (int i = 0; i < fstring.FormatMask.Count; i++)
+            try
             {
-                Globals.ThisAddIn.Application.Selection.SetRange(rStart + i, rStart + i + 1);
+                var currRange = Globals.ThisAddIn.Application.Selection.Range;
+                int rStart = currRange.Start;
 
-                Globals.ThisAddIn.Application.Selection.Text = fstring.Content[i].ToString();
+                string text = currRange.Text.Trim();
+                FormatString fstring = helper.FormatInput(text);
 
-                FormatFlags x = fstring.FormatMask[i];
-                switch (x)
-	            {
-		            case FormatFlags.None:
-                        break;
-                    case FormatFlags.Subscript:
-                        Globals.ThisAddIn.Application.Selection.Font.Subscript = 1;
-                        break;
-                    case FormatFlags.Superscript:
-                        Globals.ThisAddIn.Application.Selection.Font.Superscript = 1;
-                        break;
-                    default:
-                        break;
-	            }
+                for (int i = 0; i < fstring.FormatMask.Count; i++)
+                {
+                    Globals.ThisAddIn.Application.Selection.SetRange(rStart + i, rStart + i + 1);
 
+                    Globals.ThisAddIn.Application.Selection.Text = fstring.Content[i].ToString();
+
+                    FormatFlags x = fstring.FormatMask[i];
+                    switch (x)
+                    {
+                        case FormatFlags.None:
+                            break;
+                        case FormatFlags.Subscript:
+                            Globals.ThisAddIn.Application.Selection.Font.Subscript = 1;
+                            break;
+                        case FormatFlags.Superscript:
+                            Globals.ThisAddIn.Application.Selection.Font.Superscript = 1;
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.Message);
             }
         }
     }
