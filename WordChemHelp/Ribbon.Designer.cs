@@ -57,14 +57,14 @@
             // 
             this.formatFromularButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.formatFromularButton.Image = global::WordChemHelp.Properties.Resources.brush_icon;
-            this.formatFromularButton.Label = "Format Fomular";
+            this.formatFromularButton.Label = "Format Fomula";
             this.formatFromularButton.Name = "formatFromularButton";
             this.formatFromularButton.ShowImage = true;
             this.formatFromularButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button1_Click);
             // 
-            // Ribbon1
+            // Ribbon
             // 
-            this.Name = "Ribbon1";
+            this.Name = "Ribbon";
             this.RibbonType = "Microsoft.Word.Document";
             this.Tabs.Add(this.tab1);
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.Ribbon1_Load);
