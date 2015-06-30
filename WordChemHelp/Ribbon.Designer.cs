@@ -37,6 +37,7 @@
             this.tab1 = this.Factory.CreateRibbonTab();
             this.chemHelpGroup = this.Factory.CreateRibbonGroup();
             this.formatFromularButton = this.Factory.CreateRibbonButton();
+            this.formatAllCheckBox = this.Factory.CreateRibbonCheckBox();
             this.tab1.SuspendLayout();
             this.chemHelpGroup.SuspendLayout();
             // 
@@ -50,6 +51,7 @@
             // chemHelpGroup
             // 
             this.chemHelpGroup.Items.Add(this.formatFromularButton);
+            this.chemHelpGroup.Items.Add(this.formatAllCheckBox);
             this.chemHelpGroup.Label = "ChemHelp";
             this.chemHelpGroup.Name = "chemHelpGroup";
             // 
@@ -61,6 +63,12 @@
             this.formatFromularButton.Name = "formatFromularButton";
             this.formatFromularButton.ShowImage = true;
             this.formatFromularButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button1_Click);
+            // 
+            // formatAllCheckBox
+            // 
+            this.formatAllCheckBox.Description = "Format all appearances of selected text in this document";
+            this.formatAllCheckBox.Label = "Format All";
+            this.formatAllCheckBox.Name = "formatAllCheckBox";
             // 
             // Ribbon
             // 
@@ -80,6 +88,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonTab tab1;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup chemHelpGroup;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton formatFromularButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox formatAllCheckBox;
     }
 
     partial class ThisRibbonCollection

@@ -22,12 +22,15 @@ using System.Linq;
 using System.Text;
 using Microsoft.Office.Tools.Ribbon;
 using WordChemHelp.Core;
+using Word = Microsoft.Office.Interop.Word;
+using Office = Microsoft.Office.Core;
+using Microsoft.Office.Tools.Word;
 
 namespace WordChemHelp
 {
     public partial class Ribbon
     {
-        private static FormatHelper helper = new FormatHelper();
+        
 
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
@@ -36,42 +39,9 @@ namespace WordChemHelp
 
         private void button1_Click(object sender, RibbonControlEventArgs e)
         {
-            try
-            {
-                Globals.ThisAddIn.Application.Selection.ShrinkDiscontiguousSelection();
-                var currRange = Globals.ThisAddIn.Application.Selection.Range;
-                int rStart = currRange.Start;
-
-                string text = currRange.Text.Trim();
-                FormatString fstring = helper.FormatInput(text);
-
-                for (int i = 0; i < fstring.FormatMask.Count; i++)
-                {
-                    Globals.ThisAddIn.Application.Selection.SetRange(rStart + i, rStart + i + 1);
-
-                    Globals.ThisAddIn.Application.Selection.Text = fstring.Content[i].ToString();
-
-                    FormatFlags x = fstring.FormatMask[i];
-                    switch (x)
-                    {
-                        case FormatFlags.None:
-                            break;
-                        case FormatFlags.Subscript:
-                            Globals.ThisAddIn.Application.Selection.Font.Subscript = 1;
-                            break;
-                        case FormatFlags.Superscript:
-                            Globals.ThisAddIn.Application.Selection.Font.Superscript = 1;
-                            break;
-                        default:
-                            break;
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message);
-            }
+            Globals.ThisAddIn.FormatFormula(formatAllCheckBox.Checked);
         }
+
+        
     }
 }

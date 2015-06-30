@@ -24,17 +24,96 @@ using System.Xml.Linq;
 using Word = Microsoft.Office.Interop.Word;
 using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Word;
+using WordChemHelp.Core;
 
 namespace WordChemHelp
 {
     public partial class ThisAddIn
     {
+        private static FormatHelper helper = new FormatHelper();
+
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
+        }
+
+        public void FormatFormula(bool formatAll = false)
+        {
+            this.Application.Selection.ShrinkDiscontiguousSelection();
+            var currRange = this.Application.Selection.Range;
+            var currText = currRange.Text.Trim();
+
+            
+
+            if (formatAll)
+            {
+                object findText = currText;
+                Word.Range rng = this.Application.ActiveDocument.Content;
+                Word.Find rngFind = rng.Find;
+                rngFind.Forward = true;
+
+                do
+                {
+                    rngFind.ClearFormatting();
+                    if (rngFind.Execute(FindText: ref findText))
+                    {
+                        if(!FormatFormulaAt(rng.Start, currText))
+                            return;
+                        rng.SetRange(rng.End, this.Application.ActiveDocument.Content.End);
+                    } 
+                }
+                while (rngFind.Found);
+            }
+            else
+            {
+                FormatFormulaAt(currRange.Start, currText);
+            }
+        }
+
+        private bool FormatFormulaAt(int rStart, string text)
+        {
+            var objUndo = this.Application.UndoRecord;
+            objUndo.StartCustomRecord("Format Formula"); 
+
+            try
+            {
+                FormatString fstring = helper.FormatInput(text);
+
+                for (int i = 0; i < fstring.FormatMask.Count; i++)
+                {
+                    Word.Range rng = this.Application.ActiveDocument.Range(rStart + i, rStart + i + 1);
+
+                    rng.Text = fstring.Content[i].ToString();
+
+                    FormatFlags x = fstring.FormatMask[i];
+                    switch (x)
+                    {
+                        case FormatFlags.None:
+                            break;
+                        case FormatFlags.Subscript:
+                            rng.Font.Subscript = 1;
+                            break;
+                        case FormatFlags.Superscript:
+                            rng.Font.Superscript = 1;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.Message);
+                return false;
+            }
+            finally
+            {
+                objUndo.EndCustomRecord();
+            }
+            return true;
         }
 
         #region VSTO generated code
