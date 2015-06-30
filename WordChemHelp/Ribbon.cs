@@ -38,6 +38,7 @@ namespace WordChemHelp
         {
             try
             {
+                Globals.ThisAddIn.Application.Selection.ShrinkDiscontiguousSelection();
                 var currRange = Globals.ThisAddIn.Application.Selection.Range;
                 int rStart = currRange.Start;
 
